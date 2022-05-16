@@ -46,7 +46,6 @@ class _MainState extends State<Main> {
   List<String> userInput = [""];
   List<String> userLetters = List.generate(30, (index) => "");
   List<Color> userColor = List.generate(30, (index) => Colors.grey[900]);
-  List<Color> letterColor = List.generate(26, (index) => Colors.grey[900]);
   int counter = 0;
 
   @override
@@ -54,7 +53,24 @@ class _MainState extends State<Main> {
     Size size = MediaQuery.of(context).size;
     Color main = Colors.grey[900];
 
+    Color textColor(String text) {
+      try {
+        if (userColor[userLetters.indexOf(text)] == Color(0xff388e3c)) {
+          return Colors.green[700];
+        } else if (userColor[userLetters.indexOf(text.toLowerCase())] ==
+            Color(0xffffb74d)) {
+          return Colors.orange[300];
+        } else {
+          return Colors.grey[300];
+        }
+      } catch (e) {
+        return Colors.grey[900];
+      }
+    }
+
     GestureDetector buildTextBox(String text, Size size) {
+      Color background = Colors.grey[900];
+
       return GestureDetector(
         onTap: () {
           String currentWord = userInput.last;
@@ -66,10 +82,12 @@ class _MainState extends State<Main> {
               if (word[i] == userLetters[temp].toLowerCase()) {
                 setState(() {
                   userColor[temp] = Colors.green[700];
+                  // background = textColor(text);
                 });
               } else if (word.contains(userLetters[temp].toLowerCase())) {
                 setState(() {
                   userColor[temp] = Colors.orange[300];
+                  // background = textColor(text);
                 });
               }
               temp++;
@@ -97,7 +115,7 @@ class _MainState extends State<Main> {
         child: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(3),
-              color: Colors.grey[900],
+              color: background,
               border: Border.all(
                 color: Colors.grey[700],
                 width: 1,
@@ -149,7 +167,9 @@ class _MainState extends State<Main> {
                 counter = 0;
               });
             },
-            icon: AnimatedIcon(AnimatedIcons.),
+            icon: Icon(
+              CupertinoIcons.restart,
+            ),
           )
         ],
       ),
